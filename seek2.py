@@ -9,12 +9,17 @@ import nltk
 from nltk.corpus import words, wordnet
 import gc
 import sys
+import os
 
-# ==========================================
-# DOWNLOAD WORD DATA
-# ==========================================
-nltk.download("words", quiet=True)
-nltk.download("wordnet", quiet=True)
+
+NLTK_DATA = "/opt/nltk_data"
+
+if not os.path.exists(NLTK_DATA):
+    os.makedirs(NLTK_DATA, exist_ok=True)
+    nltk.download("words", download_dir=NLTK_DATA)
+    nltk.download("wordnet", download_dir=NLTK_DATA)
+
+nltk.data.path.append(NLTK_DATA)
 
 WORD_LIST = set(w.lower() for w in words.words() if len(w) == 5)
 
