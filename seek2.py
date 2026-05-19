@@ -274,14 +274,14 @@ def start(message):
     bot.delete_message(message.chat.id, msg.message_id)
 
     # Final intro
+    # Final intro
     bot.send_photo(
         message.chat.id,
         IMAGE_URL,
         caption=get_start_caption(user),
         reply_markup=get_buttons(),
-        has_spoiler=true
+        has_spoiler=True
     )
-
 # ==========================================
 # CALLBACK BUTTONS
 # ==========================================
