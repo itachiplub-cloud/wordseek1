@@ -353,6 +353,94 @@ def callback_query(call):
         )
 
 # ==========================================
+# BOT STATS COMMAND
+# ==========================================
+
+BOT_START_TIME = time.time()
+
+@bot.message_handler(commands=['status', 'stats'])
+def bot_status(message):
+    try:
+        # Uptime Calculation
+        uptime_seconds = int(time.time() - BOT_START_TIME)
+
+        days = uptime_seconds // 86400
+        hours = (uptime_seconds % 86400) // 3600
+        minutes = (uptime_seconds % 3600) // 60
+        seconds = uptime_seconds % 60
+
+        uptime = f"{days}d {hours}h {minutes}m {seconds}s"
+
+        # Memory Usage
+        gc_counts = gc.get_count()
+
+        # Ping Test
+        start_ping = time.time()
+        test_msg = bot.reply_to(message, "⚡ Checking Bot Status...")
+        ping = round((time.time() - start_ping) * 1000)
+
+        # Total Words
+        total_words = len(WORD_LIST)
+
+        # Bot Username
+        bot_info = bot.get_me()
+
+        # Stylish Status Message
+        status_text = f"""
+<blockquote expandable>
+🤖 <b>WORDLE BOT STATUS PANEL</b>
+━━━━━━━━━━━━━━━━━━
+
+🟢 <b>Status:</b> ONLINE
+⚡ <b>Ping:</b> <code>{ping} ms</code>
+
+⏳ <b>Uptime:</b>
+<code>{uptime}</code>
+
+🧠 <b>Total Words:</b>
+<code>{total_words:,}</code>
+
+💾 <b>Garbage Collector:</b>
+<code>{gc_counts}</code>
+
+🐍 <b>Python Version:</b>
+<code>{sys.version.split()[0]}</code>
+
+📚 <b>NLTK:</b> ACTIVE
+⚙️ <b>Mode:</b> PRODUCTION
+
+👤 <b>Bot Name:</b>
+@{bot_info.username}
+
+🔥 <b>Developer:</b>
+@II_DevDynasty_II
+
+━━━━━━━━━━━━━━━━━━
+🚀 <b>Word Engine Running Smoothly</b>
+</blockquote>
+"""
+
+        # Edit Loading Message
+        bot.edit_message_text(
+            status_text,
+            message.chat.id,
+            test_msg.message_id,
+            parse_mode="HTML"
+        )
+
+        # Log Status Check
+        logger.info(f"Status checked by {message.from_user.id}")
+
+    except Exception as e:
+        logger.error(f"Status command error: {e}")
+
+        bot.reply_to(
+            message,
+            f"❌ Status Error:\n<code>{e}</code>",
+            parse_mode="HTML"
+        )
+
+# ==========================================
 # GET FILE ID
 # ==========================================
 @bot.message_handler(commands=['getfileid'])
