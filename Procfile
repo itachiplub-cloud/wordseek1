@@ -1,0 +1,1 @@
+worker: python seek2.py
