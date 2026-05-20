@@ -1,1 +1,1 @@
-worker: python seek2.py
+worker: python seek6.py
